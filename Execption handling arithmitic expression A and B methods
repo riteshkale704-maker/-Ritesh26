@@ -1,0 +1,60 @@
+A]Try-Catch
+
+import java.util.Scanner;
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        try {
+            System.out.print("Enter first number: ");
+            int a = sc.nextInt();
+            System.out.print("Enter second number: ");
+            int b = sc.nextInt();
+            int result = a / b;
+            System.out.println("Result = " + result);
+        }
+        catch (ArithmeticException e) {
+            System.out.println("Error: Division by zero is not allowed.");
+        }
+        catch (Exception e) {
+            System.out.println("Error: Invalid input.");
+        }
+        finally {
+            System.out.println("Program continues normally...");
+            sc.close();
+        }
+    }
+}
+
+
+
+
+
+B] User defined execption
+
+import java.util.Scanner;
+class AgeException extends Exception {
+    AgeException(String message) {
+        super(message);
+    }
+}
+public class Main {
+    static void checkVoterAge(int age) throws AgeException {
+        if (age < 18)
+            throw new AgeException("Not eligible to vote! Age must be 18 or above.");
+        else
+            System.out.println("Eligible to vote!");
+    }
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        System.out.print("Enter your age: ");
+        int age = sc.nextInt();
+        try {
+            checkVoterAge(age);
+        }
+        catch (AgeException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+        System.out.println("Program continues...");
+        sc.close();
+    }
+}

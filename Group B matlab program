@@ -1,0 +1,93 @@
+MATLAB Program
+clc;
+clear;
+close all;
+
+% Parameters
+fs = 10000;             % Sampling frequency
+N = 10000;              % Number of samples
+A = 1;                  % Signal amplitude
+f = 1000;               % Signal frequency
+noise_var = 0.1;        % Noise variance
+
+% Time vector
+t = (0:N-1)/fs;
+
+% Generate sine wave signal
+signal = A * sin(2*pi*f*t);
+
+% Generate white Gaussian noise
+noise = sqrt(noise_var) * randn(1, N);
+
+% Input signal
+input_signal = signal + noise;
+
+% System parameters
+gain = 2;
+added_noise_var = 0.2;
+system_noise = sqrt(added_noise_var) * randn(1, N);
+
+% Output signal
+output_signal = gain * input_signal + system_noise;
+
+% Power calculations
+signal_power = mean(signal.^2);
+noise_power = mean(noise.^2);
+output_noise_power = mean(system_noise.^2);
+
+% SNR calculations
+snr_in = 10 * log10(signal_power / noise_power);
+snr_out = 10 * log10((gain^2 * signal_power) / output_noise_power);
+
+% Noise Figure
+noise_figure = snr_in - snr_out;
+
+% Display results
+fprintf('Input SNR (dB): %.2f\n', snr_in);
+fprintf('Output SNR (dB): %.2f\n', snr_out);
+fprintf('Noise Figure (dB): %.2f\n', noise_figure);
+%% ----------- Time Domain Plots ----------------
+figure;
+subplot(3,1,1);
+plot(t(1:1000), signal(1:1000));
+title('Original Signal (Time Domain)');
+xlabel('Time (s)');
+ylabel('Amplitude');
+
+subplot(3,1,2);
+plot(t(1:1000), noise(1:1000));
+title('White Gaussian Noise (Time Domain)');
+xlabel('Time (s)');
+ylabel('Amplitude');
+
+subplot(3,1,3);
+plot(t(1:1000), input_signal(1:1000));
+title('Signal + Noise (Time Domain)');
+xlabel('Time (s)');
+ylabel('Amplitude');
+
+%% ----------- Frequency Domain Plots ----------------
+f_axis = (-N/2:N/2-1)*(fs/N);
+
+SIGNAL_FFT = fftshift(abs(fft(signal)));
+NOISE_FFT = fftshift(abs(fft(noise)));
+INPUT_FFT = fftshift(abs(fft(input_signal)));
+
+figure;
+subplot(3,1,1);
+plot(f_axis, SIGNAL_FFT);
+title('Signal Spectrum');
+xlabel('Frequency (Hz)');
+ylabel('Magnitude');
+
+subplot(3,1,2);
+plot(f_axis, NOISE_FFT);
+title('Noise Spectrum (White Noise)');
+xlabel('Frequency (Hz)');
+ylabel('Magnitude');
+
+subplot(3,1,3);
+plot(f_axis, INPUT_FFT);
+title('Signal + Noise Spectrum');
+xlabel('Frequency (Hz)');
+ylabel('Magnitude');

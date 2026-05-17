@@ -1,0 +1,53 @@
+
+
+
+
+SR1=800; %sampling rate
+dt1=1/SR1;  %sampling interval
+t1=0:dt1:.04;
+x1=cos(180*pi*t1);
+SR2=1500; %sampling rate
+dt2=1/SR2;  %sampling interval
+t2=0:dt2:.04;
+x2=cos(180*pi*t2);
+plot(t1,x1,'rx-',t2,x2,'bo-');
+xlabel('Time (s)'); ylabel('x');
+legend('SR=200','SR=1500');
+
+
+% Sample the sinusoid x = sin(2 pi f t), where f = 2 kHz.
+% Let x1 be the signal sampled at 10 kHz.
+% Let x2 be the signal sampled at 3 kHz.
+ 
+f = 2000;
+T = 1/f;
+tmin = 0;
+tmax = 5*T;             % Plot 5 cycles
+dt1 = 1/10000;
+dt2 = 1/3000;
+t1 = tmin:dt1:tmax;
+t2 = tmin:dt2:tmax;
+x1 = sin(2*pi*f*t1);
+x2 = sin(2*pi*f*t2);
+subplot(211)
+stem(t1,x1);
+subplot(212)
+stem(t2,x2);
+
+
+% Formula for a cosine is cos(2 * pi * t / period).
+% So, 200 * pi = 2 * pi / period, so period = 2/200 = 0.01.
+% Thus 10 periods would mean a max t of 10 * 0.01 = 0.1.
+% Sampling rate is 400 Hz, or one sample every 1/400 of a second.
+% Number of Samples = (elasped time) / (time per sample)
+numSamples = round(0.1 / (1/200))
+% That is only 40 and gives a severe undersampling of the signal
+% giving a weird shape.
+% Make up a t axis going from 0 to 0.1 with numSamples samples.
+t = linspace(0, 0.1, numSamples);
+xt = 2 * cos(100 * pi * t);
+plot(t, xt, 'b.-', 'LineWidth', 2, 'MarkerSize', 15);
+grid on;
+title('x(t) vs. t', 'FontSize', fontSize);
+xlabel('t', 'FontSize', fontSize);
+ylabel('x(t)', 'FontSize', fontSize);

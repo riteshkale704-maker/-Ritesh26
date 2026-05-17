@@ -1,0 +1,42 @@
+Python Program (NumPy Based)
+import numpy as np
+
+# Parameters
+fs = 10000           # Sampling frequency
+N = 10000            # Number of samples
+signal_amplitude = 1 # Signal amplitude
+noise_variance = 0.1 # Noise power
+
+# Generate signal (sine wave)
+t = np.arange(N) / fs
+signal = signal_amplitude * np.sin(2 * np.pi * 1000 * t)
+
+# Generate white Gaussian noise
+noise = np.sqrt(noise_variance) * np.random.randn(N)
+
+# Input signal + noise
+input_signal = signal + noise
+
+# System (gain + added noise)
+system_gain = 2
+added_noise_variance = 0.2
+system_noise = np.sqrt(added_noise_variance) * np.random.randn(N)
+
+output_signal = system_gain * input_signal + system_noise
+
+# Power calculations
+signal_power = np.mean(signal ** 2)
+noise_power = np.mean(noise ** 2)
+output_noise_power = np.mean(system_noise ** 2)
+
+# SNR calculations
+snr_in = 10 * np.log10(signal_power / noise_power)
+snr_out = 10 * np.log10((system_gain**2 * signal_power) / output_noise_power)
+
+# Noise Figure
+noise_figure = snr_in - snr_out
+
+# Display results
+print(f"Input SNR (dB): {snr_in:.2f}")
+print(f"Output SNR (dB): {snr_out:.2f}")
+print(f"Noise Figure (dB): {noise_figure:.2f}")

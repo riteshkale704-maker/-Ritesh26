@@ -1,0 +1,52 @@
+% PCM (Pulse Code Modulation) MATLAB Code
+% Simple and Runnable Program
+
+clc;
+clear;
+close all;
+
+% Step 1: Generate Analog Signal
+t = 0:0.001:1;          % Time axis
+fm = 5;                 % Message frequency
+x = sin(2*pi*fm*t);     % Analog signal
+
+% Step 2: Sampling
+fs = 20;                            % Sampling frequency
+ts = 0:1/fs:1;                      
+xs = sin(2*pi*fm*ts);               % Sampled signal
+
+% Step 3: Quantization
+L = 8;                              % Number of quantization levels
+xmin = min(xs);
+xmax = max(xs);
+
+q = round((xs - xmin)/(xmax - xmin)*(L-1));
+
+% Step 4: Encoding
+n = log2(L);                        % Number of bits
+encoded = dec2bin(q,n);
+
+% Display PCM Code
+disp('PCM Encoded Binary Data:');
+disp(encoded);
+
+% Step 5: Plotting
+figure;
+
+subplot(3,1,1);
+plot(t,x);
+title('Original Analog Signal');
+xlabel('Time');
+ylabel('Amplitude');
+
+subplot(3,1,2);
+stem(ts,xs);
+title('Sampled Signal');
+xlabel('Time');
+ylabel('Amplitude');
+
+subplot(3,1,3);
+stairs(ts,q);
+title('Quantized Signal');
+xlabel('Time');
+ylabel('Quantized Levels');
